@@ -30,9 +30,9 @@
 // #define BLYNK_PRINT Serial
 
 /* Fill in information from Blynk Device Info here */
-#define BLYNK_TEMPLATE_ID "TMPL6BWJWKFpk"
-#define BLYNK_TEMPLATE_NAME "example"  
-#define BLYNK_AUTH_TOKEN "gA42bMPFxTyPo_oEvCvll0llETv6frtk"      //ใส่ token ที่ได้จาก blynk
+#define BLYNK_TEMPLATE_ID "xxxxx"
+#define BLYNK_TEMPLATE_NAME "xxxxxx"  
+#define BLYNK_AUTH_TOKEN "xxxxxx"      //ใส่ token ที่ได้จาก blynk
 
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -43,8 +43,8 @@ int Relay_pin = 14;
 // int Led_pin = 4;
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "myguyisguy";   //ใส่ชื่อ wifi ที่เราจะใช้เชื่อมต่อ
-char pass[] = "godguy2004";   //ใส่รหัส wifi ที่เราจะใช้เชื่อมต่อ
+char ssid[] = "xxxxx";   //ใส่ชื่อ wifi ที่เราจะใช้เชื่อมต่อ
+char pass[] = "xxxxx";   //ใส่รหัส wifi ที่เราจะใช้เชื่อมต่อ
 VL53L1X sensor;
 void setup()
 {
@@ -61,18 +61,8 @@ void setup()
     Serial.println("Failed to detect and initialize sensor!");
     while (1);
   }
-
-  // Use long distance mode and allow up to 50000 us (50 ms) for a measurement.
-  // You can change these settings to adjust the performance of the sensor, but
-  // the minimum timing budget is 20 ms for short distance mode and 33 ms for
-  // medium and long distance modes. See the VL53L1X datasheet for more
-  // information on range and timing limits.
   sensor.setDistanceMode(VL53L1X::Long);
   sensor.setMeasurementTimingBudget(50000);
-
-  // Start continuous readings at a rate of one measurement every 50 ms (the
-  // inter-measurement period). This period should be at least as long as the
-  // timing budget.
   sensor.startContinuous(50);
 }
 
@@ -84,12 +74,12 @@ void loop()
   if (sensor.timeoutOccurred()){
      Serial.print(" TIMEOUT"); 
   }
-  if(distance <= 10){
+  if(distance <= 10){             //ถ้าLaser วัดได้น้อยกว่า10 Relay จะทำงาน
     digitalWrite(Relay_pin,LOW);
   }else{
     digitalWrite(Relay_pin,HIGH);
   }
-  Blynk.virtualWrite(V2,distance);
+  Blynk.virtualWrite(V2,distance);  //ส่งค่าขึ้นBlynk
   Serial.println();
   delay(2000);
 }
@@ -108,61 +98,3 @@ BLYNK_WRITE(V1) // this command is listening when something is written to V1
   Serial.print("V1 button value is: "); // printing value to serial monitor
   Serial.println(pinValue);
 }
-
-//-----------------------------------
-
-// #include <Wire.h>
-// #include <Arduino.h>
-// // Set I2C bus to use: Wire, Wire1, etc.
-// #define WIRE Wire
-
-// void setup() {
-//   WIRE.begin();
-
-//   Serial.begin(115200);
-//   while (!Serial)
-//      delay(10);
-//   Serial.println("\nI2C Scanner");
-// }
-
-
-// void loop() {
-//   byte error, address;
-//   int nDevices;
-
-//   Serial.println("Scanning...");
-
-//   nDevices = 0;
-//   for(address = 1; address < 127; address++ )
-//   {
-//     // The i2c_scanner uses the return value of
-//     // the Write.endTransmisstion to see if
-//     // a device did acknowledge to the address.
-//     WIRE.beginTransmission(address);
-//     error = WIRE.endTransmission();
-
-//     if (error == 0)
-//     {
-//       Serial.print("I2C device found at address 0x");
-//       if (address<16)
-//         Serial.print("0");
-//       Serial.print(address,HEX);
-//       Serial.println("  !");
-
-//       nDevices++;
-//     }
-//     else if (error==4)
-//     {
-//       Serial.print("Unknown error at address 0x");
-//       if (address<16)
-//         Serial.print("0");
-//       Serial.println(address,HEX);
-//     }
-//   }
-//   if (nDevices == 0)
-//     Serial.println("No I2C devices found\n");
-//   else
-//     Serial.println("done\n");
-
-//   delay(5000);           // wait 5 seconds for next scan
-// }
